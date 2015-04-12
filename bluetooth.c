@@ -4,7 +4,10 @@
  * @date 4/10/2015
  */
 
-
+void pretendfuntion()
+{
+	
+}
 /// Initialize Bluetooth Transmission
 void init_bluetooth(unsigned long baud)
 {
