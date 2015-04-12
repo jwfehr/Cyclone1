@@ -1,16 +1,25 @@
-unsigned int pulse_period = 43000; // 21.5 ms
-unsigned int initialLocation = 1000; //location initially centered 90 degrees calibrated for robot 3 0 = 1000 and 180 = 4500; 90 = 2750
+/**
+ * Servo Contorl API - Provides a set of functions for controlling servo positioning
+ * @author Jacob Johnson, Justin Fehr, Mitchell Borman, Richard Millan, Zach Bennett
+ * @date 4/12/2015
+ */
 
+unsigned int pulse_period = 43000;
+unsigned int zeroDegreePulseWidth = 1000;
+unsigned int fullDegreePulseWidth = 4500;
+
+/// Initialize Servo Motor
 void init_servo()
 {
-	OCR3A = pulse_period - 1; //sets period to 21.5ms
-	OCR3B = initialLocation - 1; //sets initial rotation to midpoint 90 degrees
-	TCCR3A = 0x23;	//Configures Control register A
-	TCCR3B = 0x1A; //configues control register b
-	DDRE |= 0x10; //set pe4 as output
+	OCR3A = pulse_period - 1;
+	OCR3B = zeroDegreePulseWidth - 1;
+	TCCR3A = 0x23;
+	TCCR3B = 0x1A;
+	DDRE |= 0x10;
 }
 
+/// Move Servo to Given Degree
 void moveServo(int degrees)
 {
-	OCR3B = (degrees * 3500 / 180) - 1;
+	OCR3B = (degrees * (fullDegreePulseWidth-zeroDegreePulseWidth) / 180) - 1;
 }

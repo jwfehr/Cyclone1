@@ -1,21 +1,25 @@
 #ifndef MOVEMENT_H
 #define MOVEMENT_H
 
-#include "open_interface.h"
+/**
+ * Vortex Movement Control API Header - Provides a set of function for controlling the movement of the Vortex platform
+ * @author Jacob Johnson, Justin Fehr, Mitchell Borman, Richard Millan, Zach Bennett
+ * @date 4/12/2015
+ */
 
-// Move the Robot Forwards a Given Number of Centimeters
+/// Move Forwards Given Number of Centimeters
 void moveForward(oi_t*sensor, int centimeters);
 
-// Move the Robot Backwards a Given Number of Centimeters
+/// Move Backwards Given Number of Centimeteres
 void moveBackward(oi_t*sensor, int centimeters);
 
-// Turn the Robot CW in Place Given Number of Degrees
+/// Turn Clockwise Given Number of Degrees
 void turnClockwise(oi_t*sensor, int degrees);
 
-// Turn the Robot CCW in Place Given Number of Degrees
+/// Turn Counter-Clockwise Given Number of Degrees
 void turnCounterClockwise(oi_t*sensor, int degrees);
 
-// Move the Robot Forwards a Given Number of Centimetres with Bumper Sensors Active - reduce the distance travelled backwards
+/// Move Forwards Given Number of Centimeters with Bump Detection Activated
 void moveForwardWithBumper(oi_t*sensor, int centimeters);
 
 #endif // MOVEMENT_H
