@@ -120,7 +120,6 @@ void moveForwardWithSensors(oi_t*sensor, int centimeters)
 			serial_puts(str);
 			break;
 		}
-		oi_set_wheels(fullSpeed, fullSpeed);
 	}
 	oi_set_wheels(0, 0);
 	char distance_str[];
