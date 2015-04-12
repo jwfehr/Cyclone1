@@ -17,11 +17,12 @@ void
 read_raw_UI()
 {
     int cur_char;
-    int i;
+    int i = 0;
     
     cur_char = serial_getc();
     serial_putc(cur_char);
     
+    // Read user input until return key is pressed
     while (cur_char != 13) {
         user_input_string[i] = cur_char;
         cur_char = serial_getc();

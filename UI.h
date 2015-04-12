@@ -6,8 +6,8 @@
 //
 //
 
-#ifndef ____UI__
-#define ____UI__
+#ifndef UI_H
+#define UI_H
 
 #include <stdio.h>
 
@@ -19,4 +19,4 @@ void read_user_input_string();
 
 void display_help();
     
-#endif /* defined(____UI__) */
+#endif /* defined UI_H */
