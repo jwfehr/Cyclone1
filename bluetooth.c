@@ -1,5 +1,5 @@
-/** 
- * Bluetooth Control API - Provides a set of functions for controlling bluetooth functions 
+/**
+ * Bluetooth Control API - Provides a set of functions for controlling bluetooth functions
  * @author Jacob Johnson, Justin Fehr, Mitchell Borman, Richard Millan, Zach Bennett
  * @date 4/10/2015
  */
