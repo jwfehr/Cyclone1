@@ -1,4 +1,5 @@
 #include "open_interface.h"
+#include "bluetooth.h"
 
 /**
  * Vortex Movement Control API - Provides a set of function for controlling the movement of the Vortex platform
@@ -8,10 +9,15 @@
 
 int fullSpeed = 300;
 int turnSpeed = 100;
-int reverseDistance = 15;
+int reverseDistance = 2;
 int forwardDistance = 25;
 
 /// Move Forwards Given Number of Centimeters
+/**
+ *Moves the robot a given number of centimeters forwards
+ *@param oi_t*sensor the sensor set to be used
+ *@param centimeters an integer value of the number of centimeters to move the robot
+ */
 void moveForward(oi_t*sensor, int centimeters)
 {
 	int sum = 0;
@@ -25,6 +31,11 @@ void moveForward(oi_t*sensor, int centimeters)
 }
 
 /// Move Backwards Given Number of Centimeteres
+/**
+ *Moves the robot a given number of centimeters backwards
+ *@param oi_t*sensor the sensor set to be used
+ *@param centimeters an integer value of the number of centimeters to move the robot
+ */
 void moveBackward(oi_t*sensor, int centimeters)
 {
 	int sum = 0;
@@ -38,6 +49,11 @@ void moveBackward(oi_t*sensor, int centimeters)
 }
 
 /// Turn Clockwise Given Number of Degrees
+/**
+ * Rotates the robot a given number of degrees clockwise
+ *@param oi_t*sensor the sensor set to be used
+ *@param degrees an integer value of the number of degrees to rotate the robot
+ */
 void turnClockwise(oi_t*sensor, int degrees)
 {
 	int sum = 0;
@@ -51,6 +67,11 @@ void turnClockwise(oi_t*sensor, int degrees)
 }
 
 /// Turn Counter-Clockwise Given Number of Degrees
+/**
+ * Rotates the robot a given number of degrees counter-clockwise
+ *@param oi_t*sensor the sensor set to be used
+ *@param degrees an integer value of the number of degrees to rotate the robot
+ */
 void turnCounterClockwise(oi_t*sensor, int degrees)
 {
 	int sum = 0;
@@ -63,8 +84,16 @@ void turnCounterClockwise(oi_t*sensor, int degrees)
 	oi_set_wheels(0, 0);
 }
 
-/// Move Forwards Given Number of Centimeters with Bump Detection Activated
-void moveForwardWithBumper(oi_t*sensor, int centimeters)
+/// Move Forwards Given Number of Centimeters with Sensors Activated
+/**
+ *Moves the robot forward a given number of centimeters with bump and cliff sensors active.
+ *If sensors are activated the robot will stop, back up 2 cm and notify the controller of the sensor status, as well the net distance the robot travelled.
+ *
+ *@param oi_t*sensor the sensor set to be used
+ *@param centimeters an positive integer value indicating how far the robot is to move
+ *
+ */
+void moveForwardWithSensors(oi_t*sensor, int centimeters)
 {
 	int sum = 0;
 	oi_set_wheels(fullSpeed, fullSpeed);
@@ -75,19 +104,53 @@ void moveForwardWithBumper(oi_t*sensor, int centimeters)
 		{
 			moveBackward(sensor, reverseDistance);
 			sum -= reverseDistance * 10;
-			turnClockwise(sensor, 90);
-			moveForward(sensor, forwardDistance);
-			turnCounterClockwise(sensor, 90);
+			char str[] = "\nLEFT BUMP SENSOR ACTIVATED";
+			serial_puts(str);
+			break;
 		}
 		if(sensor->bumper_right)
 		{
 			moveBackward(sensor, reverseDistance);
 			sum -= reverseDistance * 10;
-			turnCounterClockwise(sensor, 90);
-			moveForward(sensor, forwardDistance);
-			turnClockwise(sensor, 90);
+			char str[] = "\nRIGHT BUMP SENSOR ACTIVATED";
+			serial_puts(str);
+			break;
 		}
-	oi_set_wheels(fullSpeed, fullSpeed);
+		if(sensor->cliff_left)
+		{
+			moveBackward(sensor, reverseDistance);
+			sum -= reverseDistance * 10;
+			char str[] = "\nLEFT CLIFF SENSOR ACTIVATED";
+			serial_puts(str);
+			break;
+		}
+		if(sensor->cliff_frontleft)
+		{
+			moveBackward(sensor, reverseDistance);
+			sum -= reverseDistance * 10;
+			char str[] = "\nFRONT LEFT CLIFF SENSOR ACTIVATED";
+			serial_puts(str);
+			break;
+		}
+		if(sensor->cliff_frontright)
+		{
+			moveBackward(sensor, reverseDistance);
+			sum -= reverseDistance * 10;
+			char str[] = "\nFRONT RIGHT CLIFF SENSOR ACTIVATED";
+			serial_puts(str);
+			break;
+		}
+		if(sensor->cliff_right)
+		{
+			moveBackward(sensor, reverseDistance);
+			sum -= reverseDistance * 10;
+			char str[] = "\nRIGHT CLIFF SENSOR ACTIVATED";
+			serial_puts(str);
+			break;
+		}
 	}
 	oi_set_wheels(0, 0);
+	char distance_str[];
+	sprintf(distance_str, "\nNet Distance Moved: %d cm", (sum / 10));
+	serial_puts(distance_str);
 }
