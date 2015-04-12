@@ -13,6 +13,11 @@ int reverseDistance = 2;
 int forwardDistance = 25;
 
 /// Move Forwards Given Number of Centimeters
+/**
+ *Moves the robot a given number of centimeters forwards
+ *@param oi_t*sensor the sensor set to be used
+ *@param centimeters an integer value of the number of centimeters to move the robot
+ */
 void moveForward(oi_t*sensor, int centimeters)
 {
 	int sum = 0;
@@ -26,6 +31,11 @@ void moveForward(oi_t*sensor, int centimeters)
 }
 
 /// Move Backwards Given Number of Centimeteres
+/**
+ *Moves the robot a given number of centimeters backwards
+ *@param oi_t*sensor the sensor set to be used
+ *@param centimeters an integer value of the number of centimeters to move the robot
+ */
 void moveBackward(oi_t*sensor, int centimeters)
 {
 	int sum = 0;
@@ -39,6 +49,11 @@ void moveBackward(oi_t*sensor, int centimeters)
 }
 
 /// Turn Clockwise Given Number of Degrees
+/**
+ * Rotates the robot a given number of degrees clockwise
+ *@param oi_t*sensor the sensor set to be used
+ *@param degrees an integer value of the number of degrees to rotate the robot
+ */
 void turnClockwise(oi_t*sensor, int degrees)
 {
 	int sum = 0;
@@ -52,6 +67,11 @@ void turnClockwise(oi_t*sensor, int degrees)
 }
 
 /// Turn Counter-Clockwise Given Number of Degrees
+/**
+ * Rotates the robot a given number of degrees counter-clockwise
+ *@param oi_t*sensor the sensor set to be used
+ *@param degrees an integer value of the number of degrees to rotate the robot
+ */
 void turnCounterClockwise(oi_t*sensor, int degrees)
 {
 	int sum = 0;
@@ -65,6 +85,14 @@ void turnCounterClockwise(oi_t*sensor, int degrees)
 }
 
 /// Move Forwards Given Number of Centimeters with Sensors Activated
+/**
+ *Moves the robot forward a given number of centimeters with bump and cliff sensors active.
+ *If sensors are activated the robot will stop, back up 2 cm and notify the controller of the sensor status, as well the net distance the robot travelled.
+ *
+ *@param oi_t*sensor the sensor set to be used
+ *@param centimeters an positive integer value indicating how far the robot is to move
+ *
+ */
 void moveForwardWithSensors(oi_t*sensor, int centimeters)
 {
 	int sum = 0;
