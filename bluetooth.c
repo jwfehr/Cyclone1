@@ -1,9 +1,8 @@
 /**
- * Bluetooth Control API - Provides a set of functions for controlling bluetooth functions
+ * Bluetooth Control API - Provides a set of functions for controlling bluetooth communications
  * @author Jacob Johnson, Justin Fehr, Mitchell Borman, Richard Millan, Zach Bennett
- * @date 4/10/2015
+ * @date 4/12/2015
  */
-
 
 /// Initialize Bluetooth Transmission
 void init_bluetooth(unsigned long baud)
@@ -25,7 +24,8 @@ void serial_putc(char data)
 /// Transmit a Formatted String
 void serial_puts(char x[])
 {
-	for(int i = 0; i < strlen(x); i++)
+    int i;
+	for(i = 0; i < strlen(x); i++)
 	{
 		serial_putc(x[i]);
 	}
@@ -37,5 +37,3 @@ char serial_getc()
 	while((UCSR0A & 0b10000000) == 0);
 	return UDR0;
 }
-
-// This is a test.

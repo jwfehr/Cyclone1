@@ -1,7 +1,7 @@
 /** 
- * Bluetooth Control API Header - Provides a set of function headers for controlling bluetooth functions 
+ * Bluetooth Control API Header - Provides a set of function headers for controlling bluetooth communications
  * @author Jacob Johnson, Justin Fehr, Mitchell Borman, Richard Millan, Zach Bennett
- * @date 06/26/2012
+ * @date 4/12/2015
  */
 
 #ifndef BLUETOOTH_H
