@@ -20,6 +20,6 @@ void turnClockwise(oi_t*sensor, int degrees);
 void turnCounterClockwise(oi_t*sensor, int degrees);
 
 /// Move Forwards Given Number of Centimeters with Bump Detection Activated
-void moveForwardWithBumper(oi_t*sensor, int centimeters);
+void moveForwardWithSensors(oi_t*sensor, int centimeters);
 
 #endif // MOVEMENT_H
