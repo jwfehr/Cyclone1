@@ -1,8 +1,6 @@
 Calibration
 
-Robot 12
-	Servo.c Changes: 	0 degrees = 700
-						90 degrees = 2500
-						180 degrees = 4200
-						Formula: (degrees * (350/18) + 700 - 1
-						
+Robot 12	Servo.c Changes: 	0 degrees = 700
+					90 degrees = 2500
+					180 degrees = 4200
+					Formula: (degrees * (350/18) + 700 - 1
