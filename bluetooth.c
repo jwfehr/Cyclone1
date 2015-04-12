@@ -37,3 +37,5 @@ char serial_getc()
 	while((UCSR0A & 0b10000000) == 0);
 	return UDR0;
 }
+
+// This is a test.
