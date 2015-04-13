@@ -5,11 +5,15 @@
 #include "servo.h"
 #include "sonar.h"
 #include "music.h"
+#include "init.h"
 
 char command = 'n';
+oi_t *sensorData = oi_alloc();
 
 int main(int argc)
 {
+  init_all(sensorData);
+
   //TODO START INTERFACE, PRINT STARTING INTERFACE
 
   while(command != 's') //Wait for Start Command
