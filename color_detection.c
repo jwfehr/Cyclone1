@@ -5,6 +5,8 @@
 #include "open_interface.h"
 
 void main( void ) {
+	oi_t *sensor = oi_alloc();
+	oi_init(sensor);
 	lcd_init();
 	while(1) {
 		oi_update(sensor);
