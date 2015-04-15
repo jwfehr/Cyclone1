@@ -1,5 +1,5 @@
 #ifndef MUSIC_H
-#define BLUETOOTH_H
+#define MUSIC_H
 
 #include <stdlib.h>
 #include "util.h"
