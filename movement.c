@@ -7,10 +7,15 @@
  * @date 4/12/2015
  */
 
-int fullSpeed = 300;
-int turnSpeed = 100;
-int reverseDistance = 2;
-int forwardDistance = 25;
+int fullSpeed = 300;			//Speed that robot will travel forwards or backwards in mm/s
+int turnSpeed = 100;			//Speed that robot will turn clockwise or counter-clockwise in mm/s
+int reverseDistance = 2;		//Distance robot will travel backwards when an object or cliff is encountered in cm
+int forwardDistance = 25;		//UNUSED: LEFT FROM PREVIOUS CODE
+int yellow_range_low = //TODO	//Set low range for yellow tape from cliff sensors
+int yellow_range_high = //TODO	//Set high range for yellow tape from cliff sensors
+int white_range_low = //TODO	//Set low range for white tape from cliff sensors
+int white_range_high = //TODO	//Set high range for while tape from cliff sensors
+
 
 /// Move Forwards Given Number of Centimeters
 /**
@@ -20,14 +25,14 @@ int forwardDistance = 25;
  */
 void moveForward(oi_t*sensor, int centimeters)
 {
-	int sum = 0;
-	oi_set_wheels(fullSpeed, fullSpeed);
-	while (sum < centimeters * 10)
+	int sum = 0;								//Int value to keep track of total distance travelled
+	oi_set_wheels(fullSpeed, fullSpeed);		//Set wheels to earlier specified speed
+	while (sum < centimeters * 10)				//While robot has not moved distance given	
 	{
-		oi_update(sensor);
-		sum += sensor->distance;
+		oi_update(sensor);						//Update sensor data
+		sum += sensor->distance;				//Adds distance travelled since last sensor update to sum
 	}
-	oi_set_wheels(0, 0);
+	oi_set_wheels(0, 0);						//Stops Robot
 }
 
 /// Move Backwards Given Number of Centimeteres
@@ -38,14 +43,14 @@ void moveForward(oi_t*sensor, int centimeters)
  */
 void moveBackward(oi_t*sensor, int centimeters)
 {
-	int sum = 0;
-	oi_set_wheels(-1*fullSpeed, -1*fullSpeed);
-	while (sum < centimeters * 10)
+	int sum = 0;								//Int value to keep track of total distance travelled
+	oi_set_wheels(-1*fullSpeed, -1*fullSpeed);	//Set wheels to negative earlier specified speed
+	while (sum < centimeters * 10)				//While robot has not moved distance given	
     {
-		oi_update(sensor);
-		sum -= sensor->distance;
+		oi_update(sensor);						//Update sensor data
+		sum -= sensor->distance;				//Subtracts distance travelled since last sensor update to sum
 	}
-	oi_set_wheels(0, 0);
+	oi_set_wheels(0, 0);						//Stops Robot
 }
 
 /// Turn Clockwise Given Number of Degrees
@@ -56,14 +61,14 @@ void moveBackward(oi_t*sensor, int centimeters)
  */
 void turnClockwise(oi_t*sensor, int degrees)
 {
-	int sum = 0;
-	oi_set_wheels(-1*turnSpeed, turnSpeed);
-	while (sum < degrees)
+	int sum = 0;								//Int value to keep track of total degreed rotated
+	oi_set_wheels(-1*turnSpeed, turnSpeed);		//Sets wheels to turn speed counter-clockwise
+	while (sum < degrees)						//While robot has not turned degreed given
 	{
-		oi_update(sensor);
-		sum -= sensor->angle;
+		oi_update(sensor);						//Update sensor data
+		sum -= sensor->angle;					//Subtracts degrees turned since last sensor update to sum
 	}
-	oi_set_wheels(0, 0);
+	oi_set_wheels(0, 0);						//Stops Robot
 }
 
 /// Turn Counter-Clockwise Given Number of Degrees
@@ -74,14 +79,14 @@ void turnClockwise(oi_t*sensor, int degrees)
  */
 void turnCounterClockwise(oi_t*sensor, int degrees)
 {
-	int sum = 0;
-	oi_set_wheels(turnSpeed, -1*turnSpeed);
-	while (sum < degrees)
+	int sum = 0;								//Int value to keep track of total degreed rotated
+	oi_set_wheels(turnSpeed, -1*turnSpeed);		//Sets wheels to turn speed clockwise
+	while (sum < degrees)						//While robot has not turned degreed given
 	{
-		oi_update(sensor);
-		sum += sensor->angle;
+		oi_update(sensor);						//Update sensor data
+		sum += sensor->angle;					//Adds degrees turned since last sensor update to sum
 	}
-	oi_set_wheels(0, 0);
+	oi_set_wheels(0, 0);						//Stops Robot
 }
 
 /// Move Forwards Given Number of Centimeters with Sensors Activated
@@ -95,62 +100,62 @@ void turnCounterClockwise(oi_t*sensor, int degrees)
  */
 void moveForwardWithSensors(oi_t*sensor, int centimeters)
 {
-	int sum = 0;
-	oi_set_wheels(fullSpeed, fullSpeed);
-	while (sum < centimeters * 10) {
-		oi_update(sensor);
-		sum += sensor->distance;
-		if(sensor->bumper_left)
+	int sum = 0;													//Int value to keep track of total distance travelled
+	oi_set_wheels(fullSpeed, fullSpeed);							//Sets wheels to earlier specified speed
+	while (sum < centimeters * 10) {								//While robot has not travelled specified distance 
+		oi_update(sensor);											//Update sensor data
+		sum += sensor->distance;									//Add distance travelled since last sensor update to sum
+		if(sensor->bumper_left)										//IF left bump sensor is activated
 		{
-			moveBackward(sensor, reverseDistance);
-			sum -= reverseDistance * 10;
-			char str[] = "\nLEFT BUMP SENSOR ACTIVATED";
-			serial_puts(str);
-			break;
+			moveBackward(sensor, reverseDistance);					//Move robot backwards set reverse distance
+			sum -= reverseDistance * 10;							//Subtract reverse distance from sum
+			char str[] = "\nLEFT BUMP SENSOR ACTIVATED";			//Create string to notify of sensor activation
+			serial_puts(str);										//Transmit str to Putty
+			break;													//Break loop
 		}
-		if(sensor->bumper_right)
+		if(sensor->bumper_right)									//IF right bump sensor is activated
 		{
-			moveBackward(sensor, reverseDistance);
-			sum -= reverseDistance * 10;
-			char str[] = "\nRIGHT BUMP SENSOR ACTIVATED";
-			serial_puts(str);
-			break;
+			moveBackward(sensor, reverseDistance);					//Move robot backwards set reverse distance
+			sum -= reverseDistance * 10;							//Subtract reverse distance from sum
+			char str[] = "\nRIGHT BUMP SENSOR ACTIVATED";			//Create string to notify of sensor activation
+			serial_puts(str);										//Transmit str to Putty
+			break;													//Break loop
 		}
-		if(sensor->cliff_left)
+		if(sensor->cliff_left && ( sensor->cliff_left_signal < yellow_range_low || sensor->cliff_left_signal > yellow_range_high ) )		//IF left cliff sensor is activated when not activated by yellow tape
 		{
-			moveBackward(sensor, reverseDistance);
-			sum -= reverseDistance * 10;
-			char str[] = "\nLEFT CLIFF SENSOR ACTIVATED";
-			serial_puts(str);
-			break;
+			moveBackward(sensor, reverseDistance);					//Move robot backwards set reverse distance
+			sum -= reverseDistance * 10;							//Subtract reverse distance from sum
+			char str[] = "\nLEFT CLIFF SENSOR ACTIVATED";			//Create string to notify of sensor activation
+			serial_puts(str);										//Transmit str to Putty
+			break;													//Break loop
 		}
-		if(sensor->cliff_frontleft)
+		if(sensor->cliff_frontleft && ( sensor->cliff_frontleft_signal < yellow_range_low || sensor->cliff_frontleft_signal > yellow_range_high ) )			//IF front left cliff sensor is activated when not activated by yellow tape
 		{
-			moveBackward(sensor, reverseDistance);
-			sum -= reverseDistance * 10;
-			char str[] = "\nFRONT LEFT CLIFF SENSOR ACTIVATED";
-			serial_puts(str);
-			break;
+			moveBackward(sensor, reverseDistance);					//Move robot backwards set reverse distance
+			sum -= reverseDistance * 10;							//Subtract reverse distance from sum
+			char str[] = "\nFRONT LEFT CLIFF SENSOR ACTIVATED";		//Create string to notify of sensor activation
+			serial_puts(str);										//Transmit str to Putty
+			break;													//Break loop
 		}
-		if(sensor->cliff_frontright)
+		if(sensor->cliff_frontright && ( sensor->cliff_frontright_signal < yellow_range_low || sensor->cliff_frontright_signal > yellow_range_high ) )		//IF front right cliff sensor is activated when not activated by yellow tape
 		{
-			moveBackward(sensor, reverseDistance);
-			sum -= reverseDistance * 10;
-			char str[] = "\nFRONT RIGHT CLIFF SENSOR ACTIVATED";
-			serial_puts(str);
-			break;
+			moveBackward(sensor, reverseDistance);					//Move robot backwards set reverse distance
+			sum -= reverseDistance * 10;							//Subtract reverse distance from sum
+			char str[] = "\nFRONT RIGHT CLIFF SENSOR ACTIVATED";	//Create string to notify of sensor activation
+			serial_puts(str);										//Transmit str to Putty
+			break;													//Break loop
 		}
-		if(sensor->cliff_right)
+		if(sensor->cliff_right && ( sensor->cliff_right_signal < yellow_range_low || sensor->cliff_right_signal > yellow_range_high ) )		//IF right bump sensor is activated when not activated by yellow tape
 		{
-			moveBackward(sensor, reverseDistance);
-			sum -= reverseDistance * 10;
-			char str[] = "\nRIGHT CLIFF SENSOR ACTIVATED";
-			serial_puts(str);
-			break;
+			moveBackward(sensor, reverseDistance);					//Move robot backwards set reverse distance
+			sum -= reverseDistance * 10;							//Subtract reverse distance from sum
+			char str[] = "\nRIGHT CLIFF SENSOR ACTIVATED";			//Create string to notify of sensor activation
+			serial_puts(str);										//Transmit str to Putty
+			break;													//Break loop
 		}
 	}
-	oi_set_wheels(0, 0);
-	char distance_str[];
-	sprintf(distance_str, "\nNet Distance Moved: %d cm", (sum / 10));
-	serial_puts(distance_str);
+	oi_set_wheels(0, 0);												//Stop Robot
+	char distance_str[];												//Create string to write distance travelled
+	sprintf(distance_str, "\nNet Distance Moved: %d cm", (sum / 10));	//Writes "Net Distance Moved: sum" to distance_str
+	serial_puts(distance_str);											//Transmits distance_str to Putty
 }
