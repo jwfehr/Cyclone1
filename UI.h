@@ -11,8 +11,6 @@
 
 #include <stdio.h>
 
-char user_input_string[10];
-
 void read_raw_UI();
 
 void read_user_input_string();

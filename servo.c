@@ -4,6 +4,8 @@
  * @date 4/12/2015
  */
 
+#include <avr/io.h>
+
 unsigned int pulse_period = 43000;
 unsigned int zeroDegreePulseWidth = 1000;
 unsigned int fullDegreePulseWidth = 4500;
