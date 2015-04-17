@@ -7,12 +7,12 @@
 /// Initialize Bluetooth Transmission
 /**
  * Initilization function used to setup USART registers for bluetooth communication
- * @param baud opcode representing the baudrate to be used for serial communication
+ * @param baud opcode representing the baudrate to be used for serial communication (34)
  */
 void init_bluetooth(unsigned long baud)
 {
 	UBRR0H = (unsigned char)(baud >> 8);    // set baud to inserted parameter
-	UBRR0L = (unsigned char)(baud);
+	UBRR0L = (unsigned char)(baud);         // split between 2 8-bit registers
 	UCSR0A = 0b00000010;                    // enable double transmission speeds
 	UCSR0C = 0b00001110;                    // 8 bit data frame and 2 bit stop
 	UCSR0B = 0b00011000;                    // enable transmition and reception
