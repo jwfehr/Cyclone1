@@ -16,7 +16,7 @@
  * @author Jacob Johnson, Justin Fehr, Mitchell Borman, Richard Millan, Zach Bennett
  * @date 4/12/2015
  */
-
+typedef struct object myob;
 /// Scans Environment and Returns
 void fullScan();
 
@@ -24,9 +24,9 @@ void fullScan();
 void sensorScan(int k, int irDistance[], int sonarDistance[]);
 
 /// Analyzes Scan Data and Manages Object Array
-void objectHandler(int k, int irDistance[], int sonarDistance[], struct object objects[], int* numObjects);
+//void objectHandler(int k, int irDistance[], int sonarDistance[],  myob ob[], int* numObjects);
 
 /// Converts Angular Width to Actual Width
-float angularToCm(struct object ob, int distance);
+float angularToCm( myob ob, int distance);
 
 #endif // SCAN_H

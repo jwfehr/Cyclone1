@@ -14,13 +14,13 @@
  * @date 4/12/2015
  */
 
-struct object
+typedef struct object
 {
 	int startAngle;
 	int startDistance;
 	int endAngle;
 	int endDistance;
-};
+}myob;
 
 enum status
 {
@@ -33,13 +33,13 @@ void fullScan()
 {
 	int irDistance[91] = {0};
 	int sonarDistance[91] = {0};
-	struct object objects[10];
+	myob objects[10];
 	int numObjects = 0;
 	char str[100];
 	
-//  printing stuff
-//  sprintf(str, "Degrees\tIR Distance (cm)\tSonar Distance\n\r");
-//	serial_puts(str);
+	// printing stuff - can remove				
+	sprintf(str, "Degrees\tIR Distance (cm)\tSonar Distance\n\r");
+	serial_puts(str);
 	
     int i;
 	for(i = 0; i <= 180; i += 2)
@@ -49,8 +49,8 @@ void fullScan()
 		sensorScan(i, irDistance, sonarDistance);
 		objectHandler(i, irDistance, sonarDistance, objects, &numObjects);
 //      printing stuff
-//		sprintf(str, "%d\t%d\t%d\n\r", i, irDistance[i/2], sonarDistance[i/2]);
-//		serial_puts(str);
+		sprintf(str, "%d\t%d\n\r", i, irDistance[i/2], sonarDistance[i/2]);
+		serial_puts(str);
 	}
 	
 	int minObject = 0;
@@ -60,14 +60,15 @@ void fullScan()
     int j;
 	for(j = 0; j < numObjects; j++)
 	{
-		int midAngle = (objects[j].start_angle + objects[j].end_angle)/2;
-		if(midaAngle % 2 == 0)
+		int midAngle = (objects[j].startAngle + objects[j].endAngle)/2;
+		int distance;
+		if(midAngle % 2 == 0)
 		{
-			int distance = irDistance[midangle/2];
+			distance = irDistance[midAngle/2];
 		}
 		else
 		{
-			int distance = (irDistance[(midAngle + 1) / 2] + irDistance[(midAngle - 1) / 2]) / 2;
+			distance = (irDistance[(midAngle + 1) / 2] + irDistance[(midAngle - 1) / 2]) / 2;
 		}
 		
 		value = angularTocm(objects[j], distance);
@@ -79,8 +80,8 @@ void fullScan()
 	}
 
 //  printing stuff
-//	lprintf("NUM OBJECTS: %d, INDEX: %d ", , irmin+1);
-//  moveServo((ir[irmin].start_angle + ir[irmin].end_angle)/2);
+	lprintf("NUM OBJECTS: %d, INDEX: %d ", numObjects, minObject+1);
+	moveServo((objects[minObject].startAngle + objects[minObject].endAngle)/2);
 }
 
 /// Scan with IR and Sonar and Store Result to Arrays at Appropriate Angle
@@ -92,7 +93,7 @@ void sensorScan(int k, int irDistance[], int sonarDistance[])
 }
 
 /// Analyzes Scan Data and Manages Object Array
-void objectHandler(int k, int irDistance[], int sonarDistance[], struct object objects[], int* numObjects)
+void objectHandler(int k, int irDistance[], int sonarDistance[], myob ob[], int* numObjects)
 {
 	static enum status irStatus = noObject;
 	static enum status sonarStatus = noObject;
@@ -102,13 +103,13 @@ void objectHandler(int k, int irDistance[], int sonarDistance[], struct object o
 	{
 		irStatus = hasObject;
         sonarStatus = hasObject;
-		objects[*numIR].start_angle = k;
-		objects[*numIR].start_distance = irDistance[k/2];
+		ob[*numObjects].startAngle = k;
+		ob[*numObjects].startDistance = irDistance[k/2];
 	}
 	else if((irStatus == hasObject) && (irDistance[k/2] <= 80) && (sonarStatus == hasObject) && (sonarDistance[k/2] <= 80)) // if both have object and are still less than 80
 	{
-		objects[*numIR].end_angle = k;
-		objects[*numIR].end_distance = irDistance[k/2];
+		ob[*numObjects].endAngle = k;
+		ob[*numObjects].endDistance = irDistance[k/2];
 	}
 	else if((irStatus == hasObject) && (irDistance[k/2] > 80) && (sonarStatus == hasObject) && (sonarDistance[k/2] > 80)) // if both have object and both now greater than 80
 	{
@@ -119,8 +120,7 @@ void objectHandler(int k, int irDistance[], int sonarDistance[], struct object o
 }
 
 /// Converts Angular Width to Actual Width
-float angularToCm(struct object ob, int distance)
+float angularToCm(myob ob, int distance)
 {
-	return (2*distance*tan(((ob.end_angle - ob.start_angle)/2)* 3.1415/180.0));
+	return (2*distance*tan(((ob.endAngle - ob.startAngle)/2)* 3.1415/180.0));
 }
-
