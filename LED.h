@@ -16,9 +16,9 @@
 void final_LED_sequence(void);
 
 ///Turns on LED lights to signify that the iRobot Create is waiting for the start command
-void initial_led(void);
+void initial_LED(void);
 
 ///Turns on LED lights to signify that the iRobot Create has recieved start command and has not finished the course
-void running_led(void);
+void running_LED(void);
 
 #endif // LED_H

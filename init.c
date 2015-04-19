@@ -20,4 +20,5 @@ void initAll(oi_t *self)
   oi_init(self);
   init_servo();
   init_sonar();
+  initial_LED();
 }

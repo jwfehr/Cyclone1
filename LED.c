@@ -50,7 +50,7 @@ void final_LED_sequence(void) {
  *Turns on LEDs to show that it is in waiting for the start command to be transmitted
  *Power LED will be red, all other LEDs will be off
  */
-void initial_led(void) {
+void initial_LED(void) {
 	oi_set_leds(0,0,255,255)
 }
 
@@ -59,6 +59,6 @@ void initial_led(void) {
  *Turns on LEDs to show that start command has been given and the robot has not completed the course
  *Power LED will be (NOT SURE), all other LEDs will be off
  */
-void running_led(void) {
+void running_LED(void) {
 	oi_set_leds(0,0,128,255)
 }
