@@ -42,6 +42,31 @@ void load_flag_sound(int index_1, int index_2) {
 	oi_load_song(part_2, num_2, notes_2, duration_2);		//Load part 2 to iRobot Create
 }
 
+///Loads the Damage sound to iRobot Create
+/**
+ *Loads the damage sound from the Mario video game franchise to the given song index
+ *@param index an integer from 0-15 of the index of the song on the iRobot Create
+ */
+void load_damage_sound(int index) {
+	int song_index = index;
+	int num_notes = 11;
+	char notes[num_notes] = {57, 52, 45, 1, 57, 52, 45, 1, 57, 52, 45,};
+	char duration[num_notes] = {4, 4, 4, 12, 4, 4, 4, 12, 4, 4, 4};
+	oi_load_song(song_index, num_notes, notes, duration);
+}
+
+///Plays the damage sound
+/**
+ *Plays the damage sound from the Mario video game franchise
+ */
+void play_damage() {
+	oi_t *m = oi_alloc();		//Allocate data space for open interface
+	oi_init(m);		//Initialize open interface
+	load_damage_sound(0);		//Load damage sound
+	oi_play_song(0);		//Play damage sound
+	wait_ms(938);		//Wait till end of damage sound
+}
+
 ///Plays the Mario flag sound
 /**
  *Plays the flag sound from the Mario video game franchise
