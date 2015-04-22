@@ -1,11 +1,11 @@
-#ifndef IR_H
-#define IR_H
-
 /**
  * Infrared Sensor Contorl API - Provides a set of function for controlling IR sensor
  * @author Jacob Johnson, Justin Fehr, Mitchell Borman, Richard Millan, Zach Bennett
  * @date 4/12/2015
  */
+
+#ifndef IR_H
+#define IR_H
 
 /// Initialize Analogue to Digital Converter
 void init_ir(void);

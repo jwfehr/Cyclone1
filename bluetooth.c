@@ -1,18 +1,27 @@
 /**
  * Bluetooth Control API - provides a set of functions for controlling bluetooth communications via USART
  * @author Jacob Johnson, Justin Fehr, Mitchell Borman, Richard Millan, Zach Bennett
- * @date 4/13/2015
+ * @date 4/21/2015
  */
+
+// Includes
+#include <avr/io.h>
+
+// Prototypes
+void init_bluetooth(unsigned long baud);
+void serial_putc(char data);
+void serial_puts(char x[]);
+char serial_getc();
 
 /// Initialize Bluetooth Transmission
 /**
- * Initilization function used to setup USART registers for bluetooth communication
- * @param baud opcode representing the baudrate to be used for serial communication (34)
+ * Initialization function used to setup USART registers for bluetooth communication
+ * @param baud opcode representing the baud rate to be used for serial communication
  */
 void init_bluetooth(unsigned long baud)
 {
 	UBRR0H = (unsigned char)(baud >> 8);    // set baud to inserted parameter
-	UBRR0L = (unsigned char)(baud);         // split between 2 8-bit registers
+	UBRR0L = (unsigned char)(baud);			// set baud to inserted parameter
 	UCSR0A = 0b00000010;                    // enable double transmission speeds
 	UCSR0C = 0b00001110;                    // 8 bit data frame and 2 bit stop
 	UCSR0B = 0b00011000;                    // enable transmition and reception
@@ -25,8 +34,8 @@ void init_bluetooth(unsigned long baud)
  */
 void serial_putc(char data)
 {
-	while((UCSR0A & 0b00100000) == 0);      // while previous transmittion is not complete
-	UDR0 = data;                            // place data value in trasnmittion register
+	while((UCSR0A & 0b00100000) == 0);      // while previous transmition is not complete
+	UDR0 = data;                            // place data value in transmition register
 }
 
 /// Transmit a Formatted String
@@ -45,11 +54,11 @@ void serial_puts(char x[])
 
 /// Receive a Single Character
 /**
- * Reception function used to recieve a single 8 bit character via bluetooth
- * @return the 8 bit character recieved
+ * Reception function used to receive a single 8 bit character via bluetooth
+ * @return the 8 bit character received
  */
 char serial_getc()
 {
 	while((UCSR0A & 0b10000000) == 0);      // while reception is not complete
-	return UDR0;                            // return the recieved character
+	return UDR0;                            // return the received character
 }

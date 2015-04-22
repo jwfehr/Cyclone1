@@ -27,6 +27,6 @@ void sensorScan(int k, int irDistance[], int sonarDistance[]);
 //void objectHandler(int k, int irDistance[], int sonarDistance[],  myob ob[], int* numObjects);
 
 /// Converts Angular Width to Actual Width
-float angularToCm( myob ob, int distance);
+float angularToCm(myob ob, int distance);
 
 #endif // SCAN_H

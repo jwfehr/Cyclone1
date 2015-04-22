@@ -2,7 +2,6 @@
 #include <math.h>
 #include <stdio.h>
 #include "util.h"
-#include "lcd.h"
 #include "sonar.h"
 #include "ir.h"
 #include "servo.h"
@@ -28,6 +27,11 @@ enum status
     noObject,
 };
 
+float angularToCm(myob ob, int distance);
+void fullScan();
+void sensorScan(int k, int irDistance[], int sonarDistance[]);
+void objectHandler(int k, int irDistance[], int sonarDistance[], myob ob[], int* numObjects,  enum status* irStatus);
+
 /// Scans Environment and Returns
 void fullScan()
 {
@@ -36,26 +40,30 @@ void fullScan()
 	myob objects[10];
 	int numObjects = 0;
 	char str[100];
+	static enum status irStatus = noObject;
 	
 	// printing stuff - can remove				
-	sprintf(str, "Degrees\tIR Distance (cm)\tSonar Distance\n\r");
+	//sprintf(str, "Degrees\t\tIR Distance\tSonar Distance\tObject\n\r");
+	//serial_puts(str);
+	//int jake;
+	
+	sprintf(str, "Scanning...\n\r");
 	serial_puts(str);
 	
     int i;
 	for(i = 0; i <= 180; i += 2)
 	{
 		moveServo(i);
-		wait_ms(100); // try to reduce
+		wait_ms(50);
 		sensorScan(i, irDistance, sonarDistance);
-		objectHandler(i, irDistance, sonarDistance, objects, &numObjects);
-//      printing stuff
-		sprintf(str, "%d\t%d\n\r", i, irDistance[i/2], sonarDistance[i/2]);
-		serial_puts(str);
+		objectHandler(i, irDistance, sonarDistance, objects, &numObjects, &irStatus);
+		
+		// printing stuff - can remove
+		//jake = 0;
+		//if(irDistance[i/2]<80 && sonarDistance[i/2]<80){ jake = 1111; }
+		//sprintf(str, "%d\t\t%d\t\t%d\t\t%d\n\r", i, irDistance[i/2], sonarDistance[i/2], jake);
+		//serial_puts(str);
 	}
-	
-	int minObject = 0;
-	float minValue = 10000.0;
-	float value = 0.0;
 	
     int j;
 	for(j = 0; j < numObjects; j++)
@@ -70,18 +78,14 @@ void fullScan()
 		{
 			distance = (irDistance[(midAngle + 1) / 2] + irDistance[(midAngle - 1) / 2]) / 2;
 		}
-		
-		value = angularTocm(objects[j], distance);
-		if(value < minValue)
-		{
-			minObject = j;
-			minValue = value;
-		}
+		float width = angularToCm(objects[j], distance);
+		sprintf(str, "Object: %d, Angle: %d, Distance: %d, Width: %f\n\r", j+1, midAngle, distance, width);
+		serial_puts(str);
 	}
-
-//  printing stuff
-	lprintf("NUM OBJECTS: %d, INDEX: %d ", numObjects, minObject+1);
-	moveServo((objects[minObject].startAngle + objects[minObject].endAngle)/2);
+	
+	moveServo(0);
+	sprintf(str, "Finished Scanning.\n\r");
+	serial_puts(str);
 }
 
 /// Scan with IR and Sonar and Store Result to Arrays at Appropriate Angle
@@ -89,32 +93,33 @@ void sensorScan(int k, int irDistance[], int sonarDistance[])
 {
 	k = k/2;
 	sonarDistance[k] = sonarScan();
-	irDistance[k] = irScan();
+	int average = 0;
+	average += irScan();
+	average += irScan();
+	average += irScan();
+	average += irScan();
+	average += irScan();
+	irDistance[k] = average/5;
 }
 
 /// Analyzes Scan Data and Manages Object Array
-void objectHandler(int k, int irDistance[], int sonarDistance[], myob ob[], int* numObjects)
+void objectHandler(int k, int irDistance[], int sonarDistance[], myob ob[], int* numObjects, enum status* irStatus)
 {
-	static enum status irStatus = noObject;
-	static enum status sonarStatus = noObject;
-
-    if((irStatus == noObject) && (irDistance[k/2] > 80) && (sonarStatus == noObject) && (sonarDistance[k/2] > 80)){} // if both had no object and both still beyond 80
-	else if((irStatus == noObject) && (irDistance[k/2] <= 80) && (sonarStatus == noObject) && (sonarDistance[k/2] <= 80)) // if both had no object and both less than 80
+    if((*irStatus == noObject) && (irDistance[k/2] > 80) && (sonarDistance[k/2] > 80)){} // if both had no object and both still beyond 80
+	else if((*irStatus == noObject) && (irDistance[k/2] <= 80) && (sonarDistance[k/2] <= 80)) // if both had no object and both less than 80
 	{
-		irStatus = hasObject;
-        sonarStatus = hasObject;
+		*irStatus = hasObject;
 		ob[*numObjects].startAngle = k;
-		ob[*numObjects].startDistance = irDistance[k/2];
+		ob[*numObjects].startDistance = sonarDistance[k/2];
 	}
-	else if((irStatus == hasObject) && (irDistance[k/2] <= 80) && (sonarStatus == hasObject) && (sonarDistance[k/2] <= 80)) // if both have object and are still less than 80
+	else if((*irStatus == hasObject) && (irDistance[k/2] <= 80) && (sonarDistance[k/2] <= 80)) // if both have object and are still less than 80
 	{
 		ob[*numObjects].endAngle = k;
-		ob[*numObjects].endDistance = irDistance[k/2];
+		ob[*numObjects].endDistance = sonarDistance[k/2];
 	}
-	else if((irStatus == hasObject) && (irDistance[k/2] > 80) && (sonarStatus == hasObject) && (sonarDistance[k/2] > 80)) // if both have object and both now greater than 80
+	else if((*irStatus == hasObject) && (irDistance[k/2] > 80)) // if both have object and both now greater than 80
 	{
-		irStatus = noObject;
-        sonarStatus = noObject;
+		*irStatus = noObject;
 		(*numObjects)++;
 	}
 }
@@ -122,5 +127,5 @@ void objectHandler(int k, int irDistance[], int sonarDistance[], myob ob[], int*
 /// Converts Angular Width to Actual Width
 float angularToCm(myob ob, int distance)
 {
-	return (2*distance*tan(((ob.endAngle - ob.startAngle)/2)* 3.1415/180.0));
+	return (2*distance*tan(((ob.endAngle - ob.startAngle)/2)*(3.14159265/180.0)));
 }

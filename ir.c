@@ -3,7 +3,7 @@
 #include "math.h"
 
 /**
- * Infrared Sensor Contorl API - Provides a set of function for controlling IR sensor
+ * Infrared Sensor Control API - Provides a set of function for controlling IR sensor
  * @author Jacob Johnson, Justin Fehr, Mitchell Borman, Richard Millan, Zach Bennett
  * @date 4/12/2015
  */
@@ -26,7 +26,7 @@ unsigned int ADC_read(void)
 /// Convert Arbitrary Unit to Centimeters
 float D_to_distance(unsigned int d)
 {
-	return (41510.91803 * pow(d, -1.214290489));
+	return (85931 * pow(d, -1.412));  //ROBOT8
 }
 
 /// Master IR Scan Function
