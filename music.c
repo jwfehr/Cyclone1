@@ -34,10 +34,10 @@ void load_flag_sound(int index_1, int index_2) {
 	int part_2 = index_2;		//Set index of second part of song
 	int num_1 = 16;		//set number of notes in part 1
 	int num_2 = 11;		//set number of notes in part 2
-	char notes_1[num_1] = {55,60,64,72,76,79,76,56,60,63,68,72,75,80,75};		//Set notes of part 1
-	char duration_1[num_1] = {9,9,9,9,9,9,26,26,9,9,9,9,9,9,26,26};			//Set duration of notes in part 1
-	char notes_2[num_2] = {58,62,65,70,74,77,82,82,82,82,84};		//Set notes of part 2
-	char duration_2[num_2] = {9,9,9,9,9,9,26,9,9,9,52};			//Set duration of notes in part 2
+	char notes_1[16] = {55,60,64,72,76,79,76,56,60,63,68,72,75,80,75};		//Set notes of part 1
+	char duration_1[16] = {9,9,9,9,9,9,26,26,9,9,9,9,9,9,26,26};			//Set duration of notes in part 1
+	char notes_2[11] = {58,62,65,70,74,77,82,82,82,82,84};		//Set notes of part 2
+	char duration_2[11] = {9,9,9,9,9,9,26,9,9,9,52};			//Set duration of notes in part 2
 	oi_load_song(part_1, num_1, notes_1, duration_1); 		//Load part 1 to iRobot Create
 	oi_load_song(part_2, num_2, notes_2, duration_2);		//Load part 2 to iRobot Create
 }
@@ -50,8 +50,8 @@ void load_flag_sound(int index_1, int index_2) {
 void load_damage_sound(int index) {
 	int song_index = index;
 	int num_notes = 11;
-	char notes[num_notes] = {57, 52, 45, 1, 57, 52, 45, 1, 57, 52, 45,};
-	char duration[num_notes] = {4, 4, 4, 12, 4, 4, 4, 12, 4, 4, 4};
+	char notes[11] = {57, 52, 45, 1, 57, 52, 45, 1, 57, 52, 45,};
+	char duration[11] = {4, 4, 4, 12, 4, 4, 4, 12, 4, 4, 4};
 	oi_load_song(song_index, num_notes, notes, duration);
 }
 
@@ -60,8 +60,6 @@ void load_damage_sound(int index) {
  *Plays the damage sound from the Mario video game franchise
  */
 void play_damage() {
-	oi_t *m = oi_alloc();		//Allocate data space for open interface
-	oi_init(m);		//Initialize open interface
 	load_damage_sound(0);		//Load damage sound
 	oi_play_song(0);		//Play damage sound
 	wait_ms(938);		//Wait till end of damage sound
@@ -72,8 +70,6 @@ void play_damage() {
  *Plays the flag sound from the Mario video game franchise
  */
 void play_flag() {
-	oi_t *m = oi_alloc();		//Allocate data space for open interface
-	oi_init(m);		//Initialize open interface
 	load_flag_sound(0,1);		//Load flag sound
 	oi_play_song(0);		//Play flag part 1
 	wait_ms(3313);			//Wait till end of part 1
@@ -86,8 +82,6 @@ void play_flag() {
  *Plays the coin sound from the Mario video game franchise
  */
 void play_coin() {
-	oi_t *m = oi_alloc();		//Allocate data space for open interface
-	oi_init(m);			//Initialize open interface
 	load_coin_sound(0);			//Load coin sound
 	oi_play_song(0);		//Play coin sound
 	wait_ms(813);		//Wait till end of coin sound

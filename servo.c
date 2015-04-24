@@ -1,23 +1,31 @@
 /**
- * Servo Contorl API - provides a set of functions for controlling servo positioning
+ * Servo Control API - provides a set of functions for controlling servo positioning
  * @author Jacob Johnson, Justin Fehr, Mitchell Borman, Richard Millan, Zach Bennett
- * @date 4/13/2015
+ * @date 4/21/2015
  */
 
-unsigned int pulse_period = 43000;              // period for pulse width modulation determined by prescaler
-unsigned int zeroDegreePulseWidth = 1000;       // pulse width corresponding to 0 degree position
-unsigned int fullDegreePulseWidth = 4500;       // pulse width corresponding to 180 degree position
+// Includes
+#include <avr/io.h>
+
+// Prototypes
+void init_servo();
+void moveServo(int degrees);
+
+// Global Variables
+unsigned int pulse_period = 43000;				// period for pulse width modulation determined by pre-scaler (DO NOT CHANGE)
+unsigned int zeroDegreePulseWidth = 745;		// pulse width corresponding to 0 degree position (#11=1125) (#8=745)
+unsigned int fullDegreePulseWidth = 4055;		// pulse width corresponding to 180 degree position (#11=4800) (#8=4055)
 
 /// Initialize Servo Motor
 /**
- * Initilization function for configuring servo control registers
+ * Initialization function for configuring servo control registers
  */
 void init_servo()
 {
-	OCR3A = pulse_period - 1;                   // set top value to pulse period
-	OCR3B = zeroDegreePulseWidth - 1;           // set compare match value to 0 degree position pulse width
+	OCR3A = pulse_period - 1;                   // set top value to pulse period minus one
+	OCR3B = zeroDegreePulseWidth - 1;           // set compare match value to 0 degree position pulse width minus one
 	TCCR3A = 0x23;                              // clear on compare match and use fast pulse width modulation mode
-	TCCR3B = 0x1A;                              // use a prescaler of 8
+	TCCR3B = 0x1A;                              // use a pre-scaler of 8
 	DDRE |= 0x10;                               // set pin E4 as an output
 }
 
@@ -28,5 +36,5 @@ void init_servo()
  */
 void moveServo(int degrees)
 {
-	OCR3B = (degrees * (fullDegreePulseWidth-zeroDegreePulseWidth) / 180) - 1;  // use ratio of full range pulse width to determine fixed position
+	OCR3B = (degrees * ((fullDegreePulseWidth-zeroDegreePulseWidth) / 180)) + zeroDegreePulseWidth - 1;  // use ratio of full range pulse width to determine fixed position
 }
