@@ -1,15 +1,15 @@
 /**
  * Sonar Control API Header - Provides a set of functions for controlling sonar scans
  * @author Jacob Johnson, Justin Fehr, Mitchell Borman, Richard Millan, Zach Bennett
- * @date 4/21/2015
+ * @date 5/1/2015
  */
+
+#ifndef SONAR_H
+#define SONAR_H
 
 // Includes
 #include <avr/io.h>
 #include <avr/interrupt.h>
-
-#ifndef SONAR_H
-#define SONAR_H
 
 /// Initialization Function for Sonar Sensor
 /**
@@ -30,10 +30,18 @@ void sendPulse();
  */
 unsigned int pingRead();
 
-
+/// Converts Arbitrary Units to Centimeters
+/**
+ * Using a calibrated function to determine distance from sonar time response
+ * @return the associated centimeter distance of some time value
+ */
 unsigned int timeToDistance(unsigned int time);
 
-
+/// Main Sonar Read Function
+/**
+ * Sends a startup pulse, reads the return pulse, calculates the time, and converts to a centimeter distance
+ * @return distance detected by sonar in centimeters
+ */
 int sonarScan();
 
 #endif // SONAR_H

@@ -1,7 +1,7 @@
 /**
  * Sonar Control API - Provides a set of functions for controlling sonar scans
  * @author Jacob Johnson, Justin Fehr, Mitchell Borman, Richard Millan, Zach Bennett
- * @date 4/21/2015
+ * @date 5/1/2015
  */
 
 // Includes
@@ -27,9 +27,9 @@ volatile unsigned int overflows = 0;		// number of recorder timer overflows
  */
 void init_sonar()
 {
-	TCCR1A = 0b00000000;		// input capture mode
-	TCCR1B = 0b11000010;		// used noise canceler, rising edge capture, 8 pre-scaler
-	TIMSK  = 0b00100100;		// enables input capture interrupt
+	TCCR1A = 0b00000000;                // input capture mode
+	TCCR1B = 0b11000010;                // used noise canceler, rising edge capture, 8 pre-scaler
+	TIMSK  = 0b00100100;                // enables input capture interrupt
 }
 
 /// Send Startup Pulse
@@ -38,14 +38,14 @@ void init_sonar()
  */
 void sendPulse()
 {
-	cli();						// disable all interrupts
-	DDRD  |= 0b00010000;		// set data direction to outgoing
-	PORTD |= 0b00010000;		// output a 1
-	wait_ms(1);					// wait one millisecond for sonar
-	PORTD &= 0b11101111;		// output a 0
-	DDRD  &= 0b11101111;		// set data direction to incoming
-	TIFR  |= 0b00100000;		// clear the input capture flag using a one
-	sei();						// enable all interrupts
+	cli();                              // disable all interrupts
+	DDRD  |= 0b00010000;                // set data direction to outgoing
+	PORTD |= 0b00010000;                // output a 1
+	wait_ms(1);                         // wait one millisecond for sonar
+	PORTD &= 0b11101111;                // output a 0
+	DDRD  &= 0b11101111;                // set data direction to incoming
+	TIFR  |= 0b00100000;                // clear the input capture flag using a one
+	sei();                              // enable all interrupts
 }
 
 /// Read Sonar Sensor Response

@@ -1,14 +1,14 @@
 /**
  * Servo Control API Header - provides a set of functions for controlling servo positioning
  * @author Jacob Johnson, Justin Fehr, Mitchell Borman, Richard Millan, Zach Bennett
- * @date 4/21/2015
+ * @date 5/1/2015
  */
-
-// Includes
-#include <avr/io.h>
 
 #ifndef SERVO_H
 #define SERVO_H
+
+// Includes
+#include <avr/io.h>
 
 /// Initialize Servo Motor
 /**

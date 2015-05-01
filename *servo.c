@@ -1,7 +1,7 @@
 /**
  * Servo Control API - provides a set of functions for controlling servo positioning
  * @author Jacob Johnson, Justin Fehr, Mitchell Borman, Richard Millan, Zach Bennett
- * @date 4/21/2015
+ * @date 5/1/2015
  */
 
 // Includes
@@ -36,5 +36,6 @@ void init_servo()
  */
 void moveServo(int degrees)
 {
-	OCR3B = (degrees * ((fullDegreePulseWidth-zeroDegreePulseWidth) / 180)) + zeroDegreePulseWidth - 1;  // use ratio of full range pulse width to determine fixed position
+    // use ratio of full range pulse width to determine fixed position
+	OCR3B = (degrees * ((fullDegreePulseWidth-zeroDegreePulseWidth) / 180)) + zeroDegreePulseWidth - 1;
 }
