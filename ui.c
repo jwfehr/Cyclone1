@@ -7,7 +7,7 @@
 // Includes
 #include <avr/io.h>
 #include <string.h>
-#include "UI.h"
+#include "ui.h"
 #include "bluetooth.h"
 #include "movement.h"
 #include "lcd.h"

@@ -11,7 +11,7 @@
 #include <avr/io.h>
 #include "open_interface.h"
 #include "music.h"
-#include "LED.h"
+#include "led.h"
 #include "bluetooth.h"
 
 /// Move Forwards Given Number of Centimeters
