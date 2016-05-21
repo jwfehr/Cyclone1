@@ -1,64 +1,74 @@
-#include <stdlib.h>
+/**
+ * LED Illumination API - Provides a set of functions for lighting the LEDs on the iRobot create
+ * @author Jacob Johnson, Justin Fehr, Mitchell Borman, Richard Millan, Zach Bennett
+ * @date 5/1/2015
+ */
+
+// Includes
 #include <avr/io.h>
 #include "util.h"
 #include "open_interface.h"
 
-/**
- * LED Illumination API Header - Provides a set of functions for lighting the LEDs on the iRobot Create
- * @author Jacob Johnson, Justin Fehr, Mitchell Borman, Richard Millan, Zach Bennett
- * @date 4/18/2015
- */
+// Prototypes
+void final_LED_sequence();
+void initial_LED();
+void running_LED();
 
-
-///Turns on LED lights on iRobot Create to signify reaching the final zone
+/// Final LED Sequence
 /**
- *Turns on LED lights signifying reaching the retrieval area of the course.
- *The LED light at the Power Button will transition from Green to Red and back repeatedly until the robot is turned off.
- *The two other LED lights will flash repeatedly until robot is turned off.
+ * Sets the LEDs to a repeating pattern to represent mission completion
  */
-void final_LED_sequence(void) {
-	char power_color = 0;
-	char advance_play_led = 0;
-	char intensity = 255;
-	
-	while(1) {
-		for (power_color; power_color < 255; ++power_color) {
-			if(advance_play_led == 0) {
+void final_LED_sequence()
+{
+	char power_color = 0;           // power LED color to green
+	char advance_play_led = 0;      // advance play LED off
+	char intensity = 255;           // set intenity value to maximum
+    
+	while(1)                        // continually cycle
+    {
+		for (power_color; power_color < 255; ++power_color)     // cycle through full intensity level upward
+        {
+            if(advance_play_led == 0)                           // switch led on/off position
+            {
 				advance_play_led = 1;
 			}
-			else {
+			else
+            {
 				advance_play_led = 0;
 			}
-			oi_set_leds(advance_play_led, advance_play_led, power_color, intensity);
-			wait_ms(10);
+			oi_set_leds(advance_play_led, advance_play_led, power_color, intensity);    // set LEDs
+			wait_ms(10);                                                                // wait 10 ms
 		}
-		for (power_color; power_color > 0; --power_color) {
-			if(advance_play_led == 0) {
+		for (power_color; power_color > 0; --power_color)       // cycle through full intensity level downward
+        {
+			if(advance_play_led == 0)                           // switch led on/off position
+            {
 				advance_play_led = 1;
 			}
-			else {
+			else
+            {
 				advance_play_led = 0;
 			}
-			oi_set_leds(advance_play_led, advance_play_led, power_color, intensity);
-			wait_ms(10);
+			oi_set_leds(advance_play_led, advance_play_led, power_color, intensity);    // set LEDs
+			wait_ms(10);                                                                // wait 10 ms
 		}
 	}
 }
 
-///Turns on LED lights to signify that the iRobot Create is waiting for the start command
+/// Transitions LEDs to Initial Condition
 /**
- *Turns on LEDs to show that it is in waiting for the start command to be transmitted
- *Power LED will be red, all other LEDs will be off
+ * Sets LEDs to their intial conditions to represent program waiting
  */
-void initial_LED(void) {
-	oi_set_leds(255, 255, 255, 255);
+void initial_LED()
+{
+	oi_set_leds(255, 255, 255, 255);    // all lights on
 }
 
-///Turns on LED lights to signify that the iRobot Create has recieved start command and has not finished the course
+/// Transitions LEDs to Running Condition
 /**
- *Turns on LEDs to show that start command has been given and the robot has not completed the course
- *Power LED will be (NOT SURE), all other LEDs will be off
+ * Sets LEDs to their runing conditions to represent program start
  */
-void running_LED(void) {
-	oi_set_leds(0,0,0,255);
+void running_LED()
+{
+	oi_set_leds(0,0,0,255);             // power to red, all others off
 }

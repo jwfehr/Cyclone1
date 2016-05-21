@@ -1,14 +1,14 @@
 /**
- * Bluetooth Control API - provides a set of functions for controlling bluetooth communications via USART
+ * Bluetooth Control API Header - provides a set of functions for controlling bluetooth communications via USART
  * @author Jacob Johnson, Justin Fehr, Mitchell Borman, Richard Millan, Zach Bennett
- * @date 4/21/2015
+ * @date 6/1/2015
  */
-
-// Includes
-#include <avr/io.h>
 
 #ifndef BLUETOOTH_H
 #define BLUETOOTH_H
+
+// Includes
+#include <avr/io.h>
 
 /// Initialize Bluetooth Transmission
 /**
